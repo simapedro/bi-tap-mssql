@@ -1,0 +1,82 @@
+[project]
+name = "bi-tap-mssql"
+version = "0.2.0"
+description = "`bi-tap-mssql` is a Singer tap for mssql, built with the Meltano Singer SDK."
+readme = "README.md"
+authors = [{ name = "Dan Norman", email = "buzzcutnorman@gmail.com" }]
+keywords = [
+    "ELT",
+    "mssql",
+]
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+license = "MIT"
+license-files = [ "LICENSE.md" ]
+requires-python = ">=3.9"
+dependencies = [
+    "singer-sdk[msgspec]~=0.46.4",
+    "pyodbc>=5.2.0,<6",
+    "pymssql>=2.3.4,<3",
+    "azure-identity>=1.23.0",
+]
+
+[project.optional-dependencies]
+s3 = [
+    "s3fs~=2025.5.0",
+]
+
+[project.scripts]
+bi-tap-mssql = "tap_mssql.tap:Tapmssql.cli"
+
+[dependency-groups]
+dev = [
+    { include-group = "test" },
+]
+test = [
+    "pytest>=8",
+
+    "singer-sdk[testing]",
+]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--durations=10",
+]
+
+[tool.mypy]
+python_version = "3.12"
+warn_unused_configs = true
+plugins = "sqlmypy"
+
+[tool.ruff]
+src = ["tap_mssql"]
+target-version = "py39"
+
+[tool.ruff.lint]
+ignore = [
+    "ANN101",  # missing-type-self
+    "ANN102",  # missing-type-cls
+    "COM812",  # missing-trailing-comma
+    "ISC001",  # single-line-implicit-string-concatenation
+]
+select = ["ALL"]
+
+[tool.ruff.lint.flake8-annotations]
+allow-star-arg-any = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[build-system]
+requires = [
+    "hatchling>=1,<2",
+]
+build-backend = "hatchling.build"
