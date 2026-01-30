@@ -1713,7 +1713,7 @@ wheels = [
 ]
 
 [[package]]
-name = "bi-tap-mssql"
+name = "tap-mssql"
 version = "0.2.0"
 source = { editable = "." }
 dependencies = [

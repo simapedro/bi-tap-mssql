@@ -88,7 +88,9 @@ class MSSQLConnector(SQLConnector):
             password=config.get("password"),
             host=config.get("host"),
             database=config.get("database"),
-            applicationIntent=config.get("applicationIntent")
+            query={
+                "ApplicationIntent": "ReadOnly",
+            },
         )
 
         if "port" in config:

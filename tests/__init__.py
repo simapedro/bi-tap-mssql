@@ -1,1 +1,1 @@
-"""Test suite for bi-tap-mssql."""
+"""Test suite for tap-mssql."""

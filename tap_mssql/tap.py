@@ -12,7 +12,7 @@ from .client import MSSQLStream
 class Tapmssql(SQLTap):
     """mssql tap class."""
 
-    name = "bi-tap-mssql"
+    name = "tap-mssql"
     default_stream_class = MSSQLStream
     message_writer_class = MsgSpecWriter
 

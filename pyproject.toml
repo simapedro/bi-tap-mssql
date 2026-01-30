@@ -1,7 +1,7 @@
 [project]
-name = "bi-tap-mssql"
+name = "tap-mssql"
 version = "0.2.0"
-description = "`bi-tap-mssql` is a Singer tap for mssql, built with the Meltano Singer SDK."
+description = "`tap-mssql` is a Singer tap for mssql, built with the Meltano Singer SDK."
 readme = "README.md"
 authors = [{ name = "Dan Norman", email = "buzzcutnorman@gmail.com" }]
 keywords = [
@@ -34,7 +34,7 @@ s3 = [
 ]
 
 [project.scripts]
-bi-tap-mssql = "tap_mssql.tap:Tapmssql.cli"
+tap-mssql = "tap_mssql.tap:Tapmssql.cli"
 
 [dependency-groups]
 dev = [
@@ -74,9 +74,6 @@ allow-star-arg-any = true
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
-
-[tool.hatch.build.targets.wheel]
-packages = ["bi_tap_mssql"]
 
 [build-system]
 requires = [

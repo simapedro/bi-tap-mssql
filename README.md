@@ -1,4 +1,4 @@
-# bi-tap-mssql
+# tap-mssql
 
 This is a forked version of tap-mssql that maintained by the Broadvoice BI team.
 
@@ -6,19 +6,19 @@ Main differences from the original version:
 
 ...
 
-`bi-tap-mssql` is a Singer tap for mssql. !!! Warning !!! work in progress. It works ok 😐 for full loads.
+`tap-mssql` is a Singer tap for mssql. !!! Warning !!! work in progress. It works ok 😐 for full loads.
 <br>It works maybe 🤷‍♀️🤷‍♂️ for Incremntal loads.
 
 Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 
 ### Whats New 🛳️🎉
-**2025-08-26 Azure Access Tokens:**  In issue [#82](https://github.com/BuzzCutNorman/bi-tap-mssql/issues/82) Alec and Josuha requested the ability to authenticate with Azure SQL Server Managed Instances using Azure Access Tokens. They gave me great links to examples and SQLAlchemy had a section with more code examples. After months of Josuha testing over and over and over and over again 😅 the feature is working.  If you want to give it a try use the config option `azure_access_tokens = 'True'`.  Huge thanks 🙏 to Josuha and his coworkers.
+**2025-08-26 Azure Access Tokens:**  In issue [#82](https://github.com/BuzzCutNorman/tap-mssql/issues/82) Alec and Josuha requested the ability to authenticate with Azure SQL Server Managed Instances using Azure Access Tokens. They gave me great links to examples and SQLAlchemy had a section with more code examples. After months of Josuha testing over and over and over and over again 😅 the feature is working.  If you want to give it a try use the config option `azure_access_tokens = 'True'`.  Huge thanks 🙏 to Josuha and his coworkers.
 
-**2024-06-23 Upgraded to Meltano Singer-SDK 0.46.4:** Edger at Arch implemented an MsgSpecWriter class in the SDK.  I updated bi-tap-mssql to utilize the SDK's implementation of msgspec.  Thanks Edger 🙏.
+**2024-06-23 Upgraded to Meltano Singer-SDK 0.46.4:** Edger at Arch implemented an MsgSpecWriter class in the SDK.  I updated tap-mssql to utilize the SDK's implementation of msgspec.  Thanks Edger 🙏.
 
 **2024-08-20 msgspec:**  I have been working on getting a quicker JSON encoder in place for a while and thanks to Edger at Arch I am able too.  The library I switched to is [msgspec]( https://jcristharif.com/msgspec/).  It is lightweight and fast.  Big Thank You 🙏 to Jim Crist-Harif for writing and maintaining `msgspec`.  I also removed `pedulum` and am using phython datetime at the moment.    
 
-**2024-08-12 Pendulum Dependency Fix:** Arch had been saying it was removing `pendulum` as a dependency for month. I being a procrastinator didn't change bi-tap-mssql  to use another library for dealing with dates, because I have plenty of time. Singer-SDK 0.39.1 removed `pendulum` as they said they would and well I didn't 😅. Luckly Anna Nylander swooped in to save the day by adding `pendulum` as a dependancy for bi-tap-mssql. 🎉🥳🎉
+**2024-08-12 Pendulum Dependency Fix:** Arch had been saying it was removing `pendulum` as a dependency for month. I being a procrastinator didn't change tap-mssql  to use another library for dealing with dates, because I have plenty of time. Singer-SDK 0.39.1 removed `pendulum` as they said they would and well I didn't 😅. Luckly Anna Nylander swooped in to save the day by adding `pendulum` as a dependancy for tap-mssql. 🎉🥳🎉
 
 **2024-08-05 Upgraded to Meltano Singer-SDK 0.39.0**
 
@@ -52,13 +52,13 @@ You will need to install the SQL Server Native Driver or ODBC Driver for SQL Ser
 Install from PyPi:
 
 ```bash
-pipx install bi-tap-mssql
+pipx install tap-mssql
 ```
 -->
 ### Install from GitHub:
 
 ```bash
-pipx install git+https://github.com/BuzzCutNorman/bi-tap-mssql.git
+pipx install git+https://github.com/BuzzCutNorman/tap-mssql.git
 ```
 
 ### Meltano CLI
@@ -67,15 +67,15 @@ You can find this tap at [Meltano Hub](https://hub.meltano.com).  Which makes in
 
 Add the tap-stackoverflow-sampledata extractor to your project using meltano add :
 ```bash
-meltano add extractor bi-tap-mssql --variant buzzcutnorman
+meltano add extractor tap-mssql --variant buzzcutnorman
 ```
 
 ## Configuration
 
-The simplest way to configure bi-tap-mssql is to use the Meltano interactive configuration.
+The simplest way to configure tap-mssql is to use the Meltano interactive configuration.
 
 ```bash
-meltano config bi-tap-mssql set --interactive
+meltano config tap-mssql set --interactive
 ```
 
 You can quickly set configuration options 1 - 7 this way: 
@@ -89,26 +89,26 @@ You can quickly set configuration options 1 - 7 this way:
 
 **WARNING:** Do not attempt setting any other configuration options via interactive.  Doing so has lead to incomplete configurations that fail when the tap is run.
 
-Options 8 - 15 can be setup via `meltano config bi-tap-mssql set`.  Examples for the most commonly needed configurations options are given below.
+Options 8 - 15 can be setup via `meltano config tap-mssql set`.  Examples for the most commonly needed configurations options are given below.
 
 When using `pyodbc` `sqlalchemy_url_query.driver` passes SQLAlchemny the installed ODBC driver. 
 ```bash
-meltano config bi-tap-mssql set sqlalchemy_url_query.driver "ODBC Driver 18 for SQL Server"
+meltano config tap-mssql set sqlalchemy_url_query.driver "ODBC Driver 18 for SQL Server"
 ```
 
 When using `pyodbc` `sqlalchemy_url_query.TrustServerCertificate` let SQLAlchemy know whether to trust server signed certificates when connecting to SQL Server.  Using this will correct the connection error of 
 ```bash
-meltano config bi-tap-mssql set sqlalchemy_url_query.TrustServerCertificate yes
+meltano config tap-mssql set sqlalchemy_url_query.TrustServerCertificate yes
 ```
 
 The `pyodbc` driver has added support for a “fast executemany” mode of execution which greatly reduces round trips.  You can trun the option on or off by setting `sqlalchemy_eng_params.fast_executemany` to `"True"` or `"False"`
 ```bash
-meltano config bi-tap-mssql set sqlalchemy_eng_params.fast_executemany "True"
+meltano config tap-mssql set sqlalchemy_eng_params.fast_executemany "True"
 ```
 
 If you are connecting to a Azure SQL Server Managed Instance and you need to use Azure Access Tokens you will want to set the following options only `host`, `database` and `azure_access_tokens`.  Here is the command you can use to set `azure_access_tokens` to the string of `'True'`.
 ```bash
-meltano config bi-tap-mssql set azure_access_tokens 'True'
+meltano config tap-mssql set azure_access_tokens 'True'
 ```
 
 ### Accepted Config Options
@@ -119,7 +119,7 @@ Developer TODO: Provide a list of config options accepted by the tap.
 This section can be created by copy-pasting the CLI output from:
 
 ```
-bi-tap-mssql --about --format=markdown
+tap-mssql --about --format=markdown
 ```
 -->
 
@@ -148,7 +148,7 @@ A full list of supported settings and capabilities for this
 tap is available by running:
 
 ```bash
-bi-tap-mssql --about
+tap-mssql --about
 ```
 
 ### Configure using environment variables
@@ -165,7 +165,7 @@ Developer TODO: If your tap requires special access on the source system, or any
 
 ## Usage
 
-You can easily run `bi-tap-mssql` by itself or in a pipeline using [Meltano](https://meltano.com/).
+You can easily run `tap-mssql` by itself or in a pipeline using [Meltano](https://meltano.com/).
 
 ## Troubleshooting
 
@@ -178,7 +178,7 @@ sqlalchemy.exc.OperationalError: (pyodbc.OperationalError) ('08001', '[08001] [M
 If the SQL Server you are connecting too is utlizing a self signed certificate you will get this error.  You can tell pyodbc to trust the self signed certificate with the following configuration command.
 
 ```bash
-meltano config bi-tap-mssql set sqlalchemy_url_query.TrustServerCertificate yes
+meltano config tap-mssql set sqlalchemy_url_query.TrustServerCertificate yes
 ```
 
 #### Login timeout expired:
@@ -188,16 +188,16 @@ sqlalchemy.exc.OperationalError: (pyodbc.OperationalError) ('HYT00', '[HYT00] [M
 Users have reported running into this issue when pointing to a Avaibility Group (AG) Virutal Network Name (VNN) when the group is split across multiple subnets. You will need to let pyodbc know this by adding `MultiSubnetFailover: yes`. This can ben done by running the following configuration command.
 
 ```bash
-meltano config bi-tap-mssql set sqlalchemy_url_query.MultiSubnetFailover yes
+meltano config tap-mssql set sqlalchemy_url_query.MultiSubnetFailover yes
 ```
 
 <!--
 ### Executing the Tap Directly
 
 ```bash
-bi-tap-mssql --version
-bi-tap-mssql --help
-bi-tap-mssql --config CONFIG --discover > ./catalog.json
+tap-mssql --version
+tap-mssql --help
+tap-mssql --config CONFIG --discover > ./catalog.json
 ```
 
 ## Developer Resources
@@ -220,10 +220,10 @@ Create tests within the `tap_mssql/tests` subfolder and
 poetry run pytest
 ```
 
-You can also test the `bi-tap-mssql` CLI interface directly using `poetry run`:
+You can also test the `tap-mssql` CLI interface directly using `poetry run`:
 
 ```bash
-poetry run bi-tap-mssql --help
+poetry run tap-mssql --help
 ```
 
 ### Testing with [Meltano](https://www.meltano.com)
@@ -243,7 +243,7 @@ Next, install Meltano (if you haven't already) and any needed plugins:
 # Install meltano
 pipx install meltano
 # Initialize meltano within this directory
-cd bi-tap-mssql
+cd tap-mssql
 meltano install
 ```
 
@@ -251,9 +251,9 @@ Now you can test and orchestrate using Meltano:
 
 ```bash
 # Test invocation:
-meltano invoke bi-tap-mssql --version
+meltano invoke tap-mssql --version
 # OR run a test `elt` pipeline:
-meltano elt bi-tap-mssql target-jsonl
+meltano elt tap-mssql target-jsonl
 ```
 -->
 ### SDK Dev Guide
