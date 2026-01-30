@@ -87,7 +87,8 @@ class MSSQLConnector(SQLConnector):
             username=config.get("user"),
             password=config.get("password"),
             host=config.get("host"),
-            database=config.get("database")
+            database=config.get("database"),
+            applicationIntent=config.get("applicationIntent")
         )
 
         if "port" in config:
