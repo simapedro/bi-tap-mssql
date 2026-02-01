@@ -107,9 +107,14 @@ class Tapmssql(SQLTap):
                     "TrustServerCertificate",
                     th.StringType,
                     description="This is a Yes No option"
+                ),
+                th.Property(
+                    "ApplicationIntent",
+                    th.StringType,
+                    description="This is a Yes No option"
                 )
             ),
-            description="SQLAlchemy URL Query options: driver, MultiSubnetFailover, TrustServerCertificate"  # noqa: E501
+            description="SQLAlchemy URL Query options: driver, MultiSubnetFailover, TrustServerCertificate, ApplicationIntent"  # noqa: E501
         ),
         th.Property(
             "batch_config",
