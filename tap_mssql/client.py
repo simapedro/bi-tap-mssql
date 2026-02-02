@@ -603,7 +603,12 @@ class MSSQLStream(SQLStream):
 
         try:
             with self.connector._connect() as conn:  # noqa: SLF001
-                for record in conn.execute(query).mappings():
+                result = conn.execution_options(
+                    stream_results=True,
+                    yield_per=1000,   # <-- safe value for Azure SQL
+                ).execute(query)
+                
+                for record in result.mappings():
                     transformed_record = self.post_process(dict(record))
                     if transformed_record is None:
                         continue
