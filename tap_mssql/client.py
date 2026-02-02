@@ -10,6 +10,8 @@ import struct
 import typing as t
 from base64 import b64encode
 from uuid import uuid4
+from sqlalchemy.exc import OperationalError
+
 
 import pyodbc
 import sqlalchemy as sa
@@ -591,11 +593,25 @@ class MSSQLStream(SQLStream):
         # self.logger.info('\n')
         # # remove all to here in final #
 
-        with self.connector._connect() as conn:  # noqa: SLF001
-            for record in conn.execute(query).mappings():
-                transformed_record = self.post_process(dict(record))
-                if transformed_record is None:
-                    # Record filtered out during post_process()
-                    continue
-                yield transformed_record
+        # with self.connector._connect() as conn:  # noqa: SLF001
+        #     for record in conn.execute(query).mappings():
+        #         transformed_record = self.post_process(dict(record))
+        #         if transformed_record is None:
+        #             # Record filtered out during post_process()
+        #             continue
+        #         yield transformed_record
 
+        try:
+            with self.connector._connect() as conn:  # noqa: SLF001
+                for record in conn.execute(query).mappings():
+                    transformed_record = self.post_process(dict(record))
+                    if transformed_record is None:
+                        continue
+                    yield transformed_record
+
+        except OperationalError:
+            # 🔥 Azure SQL killed the connection mid-stream
+            # Dispose the engine so the next operation gets a fresh TCP connection
+            if self.connector._engine:
+                self.connector._engine.dispose()
+            raise
