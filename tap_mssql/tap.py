@@ -50,13 +50,6 @@ class Tapmssql(SQLTap):
             description="The User Account who has been granted access to the SQL Server",  # noqa: E501
         ),
         th.Property(
-            "applicationIntent",
-            th.StringType,
-            description="Application Intent: ReadWrite or ReadOnly",
-            allowed_values=["ReadWrite", "ReadOnly"],
-            default="ReadOnly"
-        ),
-        th.Property(
             "password",
             th.StringType,
             description="The Password for the User account",
@@ -111,7 +104,9 @@ class Tapmssql(SQLTap):
                 th.Property(
                     "ApplicationIntent",
                     th.StringType,
-                    description="This is a Yes No option"
+                    description="Application Intent: ReadWrite or ReadOnly",
+                    allowed_values=["ReadWrite", "ReadOnly"],
+                    default="ReadOnly"
                 )
             ),
             description="SQLAlchemy URL Query options: driver, MultiSubnetFailover, TrustServerCertificate, ApplicationIntent"  # noqa: E501
